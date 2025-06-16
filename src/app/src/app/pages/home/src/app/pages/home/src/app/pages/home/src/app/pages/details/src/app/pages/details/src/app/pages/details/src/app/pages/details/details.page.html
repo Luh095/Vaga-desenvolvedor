@@ -1,0 +1,98 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ pokemonName | titlecase }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleFavorite(pokemonName)">
+        <ion-icon
+          [name]="isFavorite(pokemonName) ? 'heart' : 'heart-outline'"
+          color="danger"
+        ></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="pokemonData">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <img
+          [src]="
+            pokemonData.sprites.other['official-artwork'].front_default ||
+            pokemonData.sprites.front_default
+          "
+          [alt]="pokemonName"
+          style="max-width: 200px"
+        />
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+        <ion-list>
+          <ion-list-header>
+            <ion-label>Detalhes</ion-label>
+          </ion-list-header>
+
+          <ion-item>
+            <ion-label>Altura:</ion-label>
+            <ion-note slot="end">{{ pokemonData.height / 10 }} m</ion-note>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Peso:</ion-label>
+            <ion-note slot="end">{{ pokemonData.weight / 10 }} kg</ion-note>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Tipos:</ion-label>
+            <ion-note slot="end">
+              {{ pokemonData.types.map(t => t.type.name).join(', ') | titlecase }}
+            </ion-note>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Habilidades:</ion-label>
+            <ion-note slot="end">
+              {{ pokemonData.abilities.map(a => a.ability.name).join(', ') | titlecase }}
+            </ion-note>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Movimentos (6 primeiros):</ion-label>
+            <ion-note slot="end">
+              {{ pokemonData.moves.slice(0,6).map(m => m.move.name).join(', ') | titlecase }}
+            </ion-note>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Sprites alternativos:</ion-label>
+            <ion-note slot="end" style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <img
+                *ngIf="pokemonData.sprites.front_shiny"
+                [src]="pokemonData.sprites.front_shiny"
+                alt="Shiny Front"
+                style="height: 40px"
+              />
+              <img
+                *ngIf="pokemonData.sprites.back_default"
+                [src]="pokemonData.sprites.back_default"
+                alt="Back Default"
+                style="height: 40px"
+              />
+              <img
+                *ngIf="pokemonData.sprites.back_shiny"
+                [src]="pokemonData.sprites.back_shiny"
+                alt="Shiny Back"
+                style="height: 40px"
+              />
+            </ion-note>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
